@@ -21,7 +21,7 @@ model User {
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
   dateOfBirth  DateTime
-  lastActive   DateTime
+  lastActive   DateTime       @default(now())
   password     String
   posts        Post[]
   Like         Like[]
