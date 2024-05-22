@@ -26,6 +26,11 @@ export class UserController {
 
     }
 
+    @Get('/user/:id/comments')
+    async getUserComments(@Param('id') id: string) {
+        return this.userService.getUserComments(id)
+    }
+
     @Post("/user/create")
     async createUser(@Body() user: CreateUserDto) {
         this.userService.createUser(user)

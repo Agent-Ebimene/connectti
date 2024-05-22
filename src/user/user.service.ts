@@ -59,4 +59,13 @@ export class UserService {
 
         return results.posts
     }
+    async getUserComments(id: string) {
+        const results = await this.prisma.user.findUnique({
+            where: { id },
+            include: {
+                comments: true
+            }
+        })
+        return results.comments
+    }
 }
