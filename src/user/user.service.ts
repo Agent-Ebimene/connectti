@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "src/prisma.service";
-import { User } from "@prisma/client";
+import { User, Post } from "@prisma/client";
 import { UpdateUserDto } from "./dto/update.user.dto";
 import { CreateUserDto } from "./dto";
 
@@ -20,7 +20,7 @@ export class UserService {
         })
 
     }
-    async getUser(id: string): Promise<User> {
+    async getUserById(id: string): Promise<User> {
 
         const user = this.prisma.user.findUnique({
             where: {
@@ -46,5 +46,17 @@ export class UserService {
             }
         })
 
+    }
+    async getAllPostsByUser(userId: string): Promise<Post[]> {
+        const results = await this.prisma.user.findUnique({
+            where: {
+                id: userId
+            },
+            include: {
+                posts: true
+            }
+        })
+
+        return results.posts
     }
 }

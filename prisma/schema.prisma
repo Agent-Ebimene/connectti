@@ -14,39 +14,38 @@ datasource db {
 }
 
 model User {
-  id           String         @id @unique @default(uuid())
-  email        String         @unique
-  firstName    String
-  lastName     String
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  dateOfBirth  DateTime
-  lastActive   DateTime       @default(now())
-  password     String
-  posts        Post[]
-  Like         Like[]
-  comment      Comment[]
-  Notification Notification[]
+  id            String         @id @unique @default(uuid())
+  email         String         @unique
+  firstName     String
+  lastName      String
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  dateOfBirth   DateTime
+  lastActive    DateTime       @default(now())
+  password      String
+  posts         Post[]
+  Likes         Like[]
+  comments      Comment[]
+  notifications Notification[]
 }
 
 model Post {
-  id        String   @unique @default(uuid())
-  User      User?    @relation(fields: [authorId], references: [id])
+  id        String    @id @unique @default(uuid())
+  User      User?     @relation(fields: [authorId], references: [id])
   authorId  String?
   title     String
   body      String
-  Comment   Comment  @relation(fields: [commentId], references: [id])
-  commentId String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  Like      Like[]
+  Comments  Comment[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  likes     Like[]
 }
 
 model Comment {
   id     String @unique @default(uuid())
-  post   Post[]
   userId String
   postId String
+  Post   Post   @relation(fields: [postId], references: [id])
   User   User   @relation(fields: [userId], references: [id])
 
   @@id([userId, postId])
@@ -56,7 +55,7 @@ model Like {
   postId String
   userId String
   User   User   @relation(fields: [userId], references: [id])
-  post   Post   @relation(fields: [postId], references: [id])
+  Post   Post   @relation(fields: [postId], references: [id])
 
   @@id([postId, userId])
 }

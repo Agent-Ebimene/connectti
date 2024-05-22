@@ -1,14 +1,14 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
 import { UserService } from "./user.service";
-import { User, Prisma } from "@prisma/client";
 import { CreateUserDto } from "./dto";
 import { UpdateUserDto } from "./dto/update.user.dto";
 
 
-@Controller('/api/v1')
+@Controller('')
 export class UserController {
     constructor(
         private readonly userService: UserService
+
 
     ) { }
 
@@ -18,7 +18,11 @@ export class UserController {
     }
     @Get('users/:id')
     async getUser(@Param('id') id: string) {
-        return this.userService.getUser(id)
+        return this.userService.getUserById(id)
+    }
+    @Get('user/:id/posts')
+    async getAllPostsByUser(@Param('id') id: string) {
+        return this.userService.getAllPostsByUser(id)
 
     }
 
