@@ -20,6 +20,11 @@ export class UserController {
     async getUser(@Param('id') id: string) {
         return this.userService.getUserById(id)
     }
+    //TODO: change this route later
+    @Get('/user/:email')
+    async getUserByEmail(@Param('email') email: string) {
+        return this.userService.getUserByEmail(email)
+    }
     @Get('user/:id/posts')
     async getAllPostsByUser(@Param('id') id: string) {
         return this.userService.getAllPostsByUser(id)

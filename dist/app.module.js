@@ -13,12 +13,13 @@ const app_service_1 = require("./app.service");
 const user_module_1 = require("./user/user.module");
 const post_module_1 = require("./post/post.module");
 const comment_module_1 = require("./comment/comment.module");
+const auth_module_1 = require("./auth/auth.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [user_module_1.UserModule, post_module_1.PostModule, comment_module_1.CommentModule],
+        imports: [user_module_1.UserModule, post_module_1.PostModule, comment_module_1.CommentModule, auth_module_1.AuthModule],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
     })

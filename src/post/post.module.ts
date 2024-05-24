@@ -8,7 +8,7 @@ import { UserService } from "src/user/user.service";
     imports: [],
     controllers: [PostController],
     providers: [PostService, PrismaService],
+
 })
-export class PostModule {
-}
+export class PostModule { }
 

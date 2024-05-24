@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "src/prisma.service";
-import { User, Post } from "@prisma/client";
+import { User, Post, Comment } from "@prisma/client";
 import { UpdateUserDto } from "./dto/update.user.dto";
 import { CreateUserDto } from "./dto";
 
@@ -10,8 +10,13 @@ export class UserService {
 
     }
     async getAllUsers(): Promise<User[]> {
-        const users = await this.prisma.user.findMany()
-        return users
+        try {
+
+            const users = await this.prisma.user.findMany()
+            return users
+        } catch (err) {
+            throw err
+        }
 
     }
     async createUser(data: CreateUserDto): Promise<User> {
@@ -27,6 +32,22 @@ export class UserService {
                 id
             }
         })
+        if (!user) {
+            throw new Error('There is no user with this id')
+        }
+        return user
+    }
+
+    async getUserByEmail(username: string): Promise<User> {
+
+        const user = await this.prisma.user.findUnique({
+            where: {
+                email: username
+            }
+        })
+        if (!user) {
+            throw new Error('There is no user with this email')
+        }
         return user
     }
 
@@ -45,8 +66,12 @@ export class UserService {
                 id
             }
         })
+        if (!user) {
+            throw new Error('This user does not exist')
+        }
 
     }
+    //TODO  : MOVE THIS METHOD TO POST SERVICE
     async getAllPostsByUser(userId: string): Promise<Post[]> {
         const results = await this.prisma.user.findUnique({
             where: {
@@ -59,7 +84,7 @@ export class UserService {
 
         return results.posts
     }
-    async getUserComments(id: string) {
+    async getUserComments(id: string): Promise<Comment[]> {
         const results = await this.prisma.user.findUnique({
             where: { id },
             include: {

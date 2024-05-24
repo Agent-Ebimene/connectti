@@ -42,12 +42,14 @@ model Post {
 }
 
 model Comment {
-  id     String @unique @default(uuid())
-  userId String
-  postId String
-  body   String
-  Post   Post   @relation(fields: [postId], references: [id])
-  User   User   @relation(fields: [userId], references: [id])
+  id        String   @unique @default(uuid())
+  userId    String
+  postId    String
+  body      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  Post      Post     @relation(fields: [postId], references: [id])
+  User      User     @relation(fields: [userId], references: [id])
 
   @@id([userId, postId])
 }
