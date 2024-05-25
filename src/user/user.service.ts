@@ -3,6 +3,7 @@ import { PrismaService } from "src/prisma.service";
 import { User, Post, Comment } from "@prisma/client";
 import { UpdateUserDto } from "./dto/update.user.dto";
 import { CreateUserDto } from "./dto";
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -15,13 +16,20 @@ export class UserService {
             const users = await this.prisma.user.findMany()
             return users
         } catch (err) {
-            throw err
+            throw new Error('Error fetching users')
         }
 
     }
     async createUser(data: CreateUserDto): Promise<User> {
+        const salt = await bcrypt.genSalt()
+        const password = data.password
+        const hash = await bcrypt.hash(password, salt)
+
         return this.prisma.user.create({
-            data
+            data: {
+                ...data,
+                password: hash
+            }
         })
 
     }
