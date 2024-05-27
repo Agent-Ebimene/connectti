@@ -36,12 +36,6 @@ export class UserController {
         return this.userService.getUserComments(id)
     }
 
-    @Post("/user/create")
-    async createUser(@Body() user: CreateUserDto) {
-        this.userService.createUser(user)
-
-    }
-
     @Put('/user/update/:id')
     async updateUser(@Param('id') id: string, @Body() data: UpdateUserDto) {
         return this.userService.updateUser(id, data)
