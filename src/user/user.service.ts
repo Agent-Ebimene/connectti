@@ -84,9 +84,32 @@ export class UserService {
         const results = await this.prisma.user.findUnique({
             where: { id },
             include: {
-                comments: true
+                comments: true,
             }
         })
         return results.comments
+    }
+    async deleteUserComment(id: string): Promise<void> {
+        const comment = await this.prisma.comment.findUnique({
+            where: {
+                id
+            }
+        })
+        if (!comment) {
+            throw new Error('Comment not found!')
+        }
+        const user = await this.prisma.user.findUnique({
+            where: {
+                id: comment.userId
+            }
+        })
+        if (!user) {
+            throw new Error('You cannot delete a comment you did not create')
+        }
+        await this.prisma.comment.delete({
+            where: {
+                id
+            }
+        })
     }
 }

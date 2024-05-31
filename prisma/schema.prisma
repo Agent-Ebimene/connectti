@@ -23,6 +23,7 @@ model User {
   dateOfBirth   DateTime
   lastActive    DateTime       @default(now())
   password      String
+  description   String?
   posts         Post[]
   Likes         Like[]
   comments      Comment[]
@@ -47,11 +48,9 @@ model Comment {
   postId    String
   body      String
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   Post      Post     @relation(fields: [postId], references: [id])
   User      User     @relation(fields: [userId], references: [id])
-
-  @@id([userId, postId])
 }
 
 model Like {
