@@ -48,7 +48,7 @@ export class CommentService {
         if (!comment) {
             throw new Error('Comment not found!')
         }
-        //TODO : Hnadle possible errors
+        //TODO : Handle possible errors
         // const user = await this.prisma.user.findUnique({
         //     where: {
         //         id: comment.userId

@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { CreatePostDto, UpdatePostDto } from "./dto";
-import { Prisma, Post } from "@prisma/client";
+import { Post, Comment } from "@prisma/client";
 import { PrismaService } from "src/prisma.service";
 
 @Injectable()
@@ -43,6 +43,17 @@ export class PostService {
                 id
             }
         })
+    }
+    // TODO: Implement a getAllPosts with limit and pagination
+
+    async getAllPostComments(postId: string): Promise<Comment[]> {
+        const allComments = await this.prisma.comment.findMany({
+            where: {
+                postId
+            }
+        })
+        return allComments
+
     }
 
 }

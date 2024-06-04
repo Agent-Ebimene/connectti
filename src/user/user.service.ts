@@ -112,4 +112,13 @@ export class UserService {
             }
         })
     }
+    async getAllPostComments(postId: string): Promise<Comment[]> {
+        const allComments = await this.prisma.comment.findMany({
+            where: {
+                postId
+            }
+        })
+        return allComments
+
+    }
 }

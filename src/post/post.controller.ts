@@ -7,15 +7,20 @@ import { UpdatePostDto } from "./dto";
 export class PostController {
     constructor(private readonly postService: PostService) { }
 
-    @Post('/post/create')
-    async createPost(@Body() data: Prisma.PostCreateInput) {
-        return this.postService.createPost(data)
-    }
-
-
     @Get('/post/:id')
     async getPostById(@Param('id') id: string) {
         return this.postService.getPostById(id)
+    }
+
+    @Get('/post/:id/comments')
+    async getAllPostComments(@Param('id') id: string) {
+        return this.postService.getAllPostComments(id)
+
+    }
+
+    @Post('/post/create')
+    async createPost(@Body() data: Prisma.PostCreateInput) {
+        return this.postService.createPost(data)
     }
 
     @Put('/post/:id')
@@ -27,4 +32,5 @@ export class PostController {
     async deletePost(@Param('id') id: string) {
         return this.postService.deletePost(id)
     }
+
 }
