@@ -2,12 +2,15 @@ import { Injectable } from "@nestjs/common";
 import { PrismaService } from "src/prisma.service";
 import { Comment, Prisma } from "@prisma/client";
 import { UpdateCommentDto } from "./dto";
+import { NotitificationService } from "src/notification/notification.service";
+import { type } from "os";
 
 
 @Injectable()
 export class CommentService {
     constructor(
-        private readonly prisma: PrismaService
+        private readonly prisma: PrismaService,
+        private readonly notificationService: NotitificationService
     ) { }
 
     async createCommentOnPost(data: Prisma.CommentUncheckedCreateInput): Promise<Comment> {
@@ -16,18 +19,30 @@ export class CommentService {
                 id: data.userId
             }
         })
-        const postExits = await this.prisma.post.findUnique({
-            where: {
-                id: data.postId
-            }
-        })
         if (!userExists) {
             throw new Error('User not found!')
         }
-        if (!postExits) throw new Error("Post not found!")
         const comment = await this.prisma.comment.create({
             data
         })
+
+        const post = await this.prisma.post.findUnique({
+            where: {
+                id: data.postId
+            },
+
+        })
+
+        if (post) {
+            await this.notificationService.createNotification(post.authorId, { message: "A new Comment has been added to your post", type: "Comment" })
+
+        } else {
+            throw new Error("Post not found!")
+        }
+
+
+
+
         return comment
     }
     async getUserComments(id: string): Promise<Comment[]> {

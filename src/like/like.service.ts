@@ -1,10 +1,15 @@
 import { Injectable } from "@nestjs/common";
 import { Like, Prisma, User } from "@prisma/client";
+import { NotitificationService } from "src/notification/notification.service";
 import { PrismaService } from "src/prisma.service";
 
 @Injectable()
 export class LikeService {
-    constructor(private readonly prisma: PrismaService) { }
+    constructor(
+        private readonly prisma: PrismaService,
+        private readonly notificationService: NotitificationService
+
+    ) { }
 
     async likePost(data: Prisma.LikeUncheckedCreateInput): Promise<Like> {
 
@@ -24,6 +29,16 @@ export class LikeService {
         const like = await this.prisma.like.create({
             data
         })
+
+        const post = await this.prisma.post.findUnique({
+            where: {
+                id: data.postId
+            },
+
+        })
+        if (post) {
+            await this.notificationService.createNotification(post.authorId, { message: "You have a like on your post", type: "Like" })
+        }
         return like
     }
 
@@ -46,13 +61,13 @@ export class LikeService {
             include: {
                 likes: {
                     include: {
-                        User: true
+                        user: true
                     }
                 }
 
             }
         })
-        const usersWhoLikedPost = results.likes.map((user) => user.User)
+        const usersWhoLikedPost = results.likes.map((user) => user.user)
 
         return usersWhoLikedPost
     }
