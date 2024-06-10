@@ -4,10 +4,15 @@ import { User, Post, Comment } from "@prisma/client";
 import { UpdateUserDto } from "./dto/update.user.dto";
 import { CreateUserDto } from "./dto";
 import * as bcrypt from 'bcrypt';
+import { NotitificationService } from "src/notification/notification.service";
 
 @Injectable()
 export class UserService {
-    constructor(private readonly prisma: PrismaService) {
+    constructor(
+        private readonly prisma: PrismaService,
+
+
+    ) {
 
     }
     async getAllUsers(): Promise<User[]> {
@@ -112,13 +117,5 @@ export class UserService {
             }
         })
     }
-    async getAllPostComments(postId: string): Promise<Comment[]> {
-        const allComments = await this.prisma.comment.findMany({
-            where: {
-                postId
-            }
-        })
-        return allComments
 
-    }
 }

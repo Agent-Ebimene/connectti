@@ -2,12 +2,14 @@ import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common"
 import { UserService } from "./user.service";
 import { CreateUserDto } from "./dto";
 import { UpdateUserDto } from "./dto/update.user.dto";
+import { NotitificationService } from "src/notification/notification.service";
 
 
 @Controller('')
 export class UserController {
     constructor(
-        private readonly userService: UserService
+        private readonly userService: UserService,
+        private readonly notificationService: NotitificationService
 
 
     ) { }
@@ -29,6 +31,14 @@ export class UserController {
     async getAllPostsByUser(@Param('id') id: string) {
         return this.userService.getAllPostsByUser(id)
 
+    }
+    @Get('user/:id/notifications')
+    async getUserNotifications(@Param('id') id: string) {
+        return this.notificationService.getUserNotifications(id)
+    }
+    @Get('user/notification/:id')
+    async getNotification(@Param('id') id: string) {
+        return this.notificationService.getNotification(id)
     }
 
     @Get('/user/:id/comments')

@@ -39,10 +39,10 @@ export class AuthService {
         const users = await this.prisma.user.findMany();
         const isUserExisting = users.find(({ email }) => email === user.email)
         if (isUserExisting) {
-            throw new BadRequestException('This user already exists!');
+            throw new Error('This user already exists!');
         }
         if (!passwordPattern.test(user.password)) {
-            throw new BadRequestException('Password must be exactly 6 characters long and contain at least one special character')
+            throw new Error('Password must be exactly 6 characters long and contain at least one special character')
         }
         // TODO : handle email validation in nestjs way
 

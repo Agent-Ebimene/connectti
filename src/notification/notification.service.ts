@@ -16,5 +16,37 @@ export class NotitificationService {
 
         })
     }
+    async getUserNotifications(userId: string): Promise<Notification[]> {
+
+        const userNotifications = await this.prisma.notification.findMany({
+            where: {
+                userId
+            }
+        })
+        return userNotifications
+    }
+    async getNotification(id: string) {
+
+        let notification = await this.prisma.notification.findUnique({
+            where: {
+                id
+            }
+        })
+        if (notification) {
+            notification = await this.prisma.notification.update({
+                where: {
+                    id
+                },
+                data: {
+                    ...notification,
+                    read: true
+                }
+            })
+        }
+
+
+        return notification
+
+    }
 
 }
