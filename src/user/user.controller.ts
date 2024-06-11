@@ -3,6 +3,7 @@ import { UserService } from "./user.service";
 import { CreateUserDto } from "./dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { NotitificationService } from "src/notification/notification.service";
+import { Public } from "src/decorators/public.decorator";
 
 
 @Controller('')
@@ -14,10 +15,12 @@ export class UserController {
 
     ) { }
 
+    @Public()
     @Get('/users')
     getAllUsers() {
         return this.userService.getAllUsers()
     }
+    @Public()
     @Get('users/:id')
     async getUser(@Param('id') id: string) {
         return this.userService.getUserById(id)

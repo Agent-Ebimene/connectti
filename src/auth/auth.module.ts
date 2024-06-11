@@ -9,6 +9,7 @@ import { jwtConstants } from "./constants";
 import { JwtStrategy } from "./jwt.strategy";
 import { PrismaService } from "src/prisma.service";
 
+
 @Module({
     imports: [UserModule, PassportModule,
         JwtModule.register({
@@ -17,6 +18,7 @@ import { PrismaService } from "src/prisma.service";
         }),
     ],
     controllers: [AuthController],
-    providers: [AuthService, LocalStrategy, JwtStrategy, PrismaService]
+    providers: [AuthService, LocalStrategy, JwtStrategy, PrismaService
+    ]
 })
 export class AuthModule { }
