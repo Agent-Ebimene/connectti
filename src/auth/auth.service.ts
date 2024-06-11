@@ -3,7 +3,7 @@ import { UserService } from "src/user/user.service";
 import { JwtService } from '@nestjs/jwt';
 import { User } from "@prisma/client";
 import * as bcrypt from 'bcrypt';
-import { CreateUserDto } from "src/user/dto";
+import { CreateUserDto, LoginUserDto } from "src/user/dto";
 import { PrismaService } from "src/prisma.service";
 import { passwordPattern, isValidEmail } from "src/utils/user";
 
@@ -41,9 +41,9 @@ export class AuthService {
         if (isUserExisting) {
             throw new Error('This user already exists!');
         }
-        if (!passwordPattern.test(user.password)) {
-            throw new Error('Password must be exactly 6 characters long and contain at least one special character')
-        }
+        // if (!passwordPattern.test(user.password)) {
+        //     throw new Error('Password must be exactly 6 characters long and contain at least one special character')
+        // }
         // TODO : handle email validation in nestjs way
 
 
@@ -55,10 +55,10 @@ export class AuthService {
         })
 
     }
-    async loginUser(user: User) {
+    async loginUser(user: LoginUserDto) {
         const payload = {
             username: user.email,
-            sub: user.id
+            sub: user.password
         }
 
         return {
