@@ -1,9 +1,9 @@
-import { Injectable, BadRequestException } from "@nestjs/common";
+import { Injectable, BadRequestException, UnauthorizedException } from "@nestjs/common";
 import { UserService } from "src/user/user.service";
 import { JwtService } from '@nestjs/jwt';
 import { User } from "@prisma/client";
 import * as bcrypt from 'bcrypt';
-import { CreateUserDto, LoginUserDto } from "src/user/dto";
+import { CreateUserDto } from "src/user/dto";
 import { PrismaService } from "src/prisma.service";
 import { passwordPattern, isValidEmail } from "src/utils/user";
 
@@ -20,7 +20,16 @@ export class AuthService {
     async validateUser(email: string, password: string) {
 
         const user = await this.userService.getUserByEmail(email)
-        if (user && await bcrypt.compare(password, user.password)) {
+        if (!user) {
+            throw new UnauthorizedException('Incorrect email address!');
+        }
+
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) {
+            throw new UnauthorizedException('Incorrect password!')
+        }
+
+        if (user && isPasswordValid) {
             const { password, ...result } = user
 
             return result
@@ -41,9 +50,9 @@ export class AuthService {
         if (isUserExisting) {
             throw new Error('This user already exists!');
         }
-        // if (!passwordPattern.test(user.password)) {
-        //     throw new Error('Password must be exactly 6 characters long and contain at least one special character')
-        // }
+        if (!passwordPattern.test(user.password)) {
+            throw new Error('Password must be exactly 6 characters long and contain at least one special character')
+        }
         // TODO : handle email validation in nestjs way
 
 
@@ -55,10 +64,10 @@ export class AuthService {
         })
 
     }
-    async loginUser(user: LoginUserDto) {
+    async loginUser(user: User) {
         const payload = {
             username: user.email,
-            sub: user.password
+            sub: user.id
         }
 
         return {

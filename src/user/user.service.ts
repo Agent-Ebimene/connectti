@@ -39,16 +39,13 @@ export class UserService {
         return user
     }
 
-    async getUserByEmail(username: string): Promise<User> {
+    async getUserByEmail(email: string): Promise<User> {
 
         const user = await this.prisma.user.findUnique({
             where: {
-                email: username
+                email
             }
         })
-        if (!user) {
-            throw new Error('There is no user with this email')
-        }
         return user
     }
 
