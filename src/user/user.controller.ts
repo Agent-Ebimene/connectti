@@ -15,7 +15,6 @@ export class UserController {
 
     ) { }
 
-    @Public()
     @Get('/users')
     getAllUsers() {
         return this.userService.getAllUsers()
