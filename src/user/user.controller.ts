@@ -14,13 +14,13 @@ export class UserController {
 
 
     ) { }
-
+    @Public()
     @Get('/users')
     getAllUsers() {
         return this.userService.getAllUsers()
     }
     @Public()
-    @Get('users/:id')
+    @Get('user/:id')
     async getUser(@Param('id') id: string) {
         return this.userService.getUserById(id)
     }
@@ -29,6 +29,8 @@ export class UserController {
     async getUserByEmail(@Param('email') email: string) {
         return this.userService.getUserByEmail(email)
     }
+
+    @Public()
     @Get('user/:id/posts')
     async getAllPostsByUser(@Param('id') id: string) {
         return this.userService.getAllPostsByUser(id)
