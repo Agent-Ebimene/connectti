@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { CreatePostDto, UpdatePostDto } from "./dto";
 import { Post, Comment } from "@prisma/client";
 import { PrismaService } from "src/prisma.service";
+import { Prisma } from "@prisma/client";
 
 @Injectable()
 export class PostService {
@@ -11,7 +12,7 @@ export class PostService {
     ) {
     }
 
-    async createPost(data: CreatePostDto): Promise<Post> {
+    async createPost(data: Prisma.PostUncheckedCreateInput): Promise<Post> {
 
         const post = await this.prisma.post.create({
             data
@@ -56,6 +57,13 @@ export class PostService {
 
     }
 
+    async getAllPosts(): Promise<Post[]> {
+        const posts = await this.prisma.post.findMany()
+        if (!posts) {
+            throw new Error('Error Fetching data')
+        }
+        return posts
+    }
 }
 
 

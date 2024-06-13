@@ -2,6 +2,7 @@ import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common"
 import { Prisma } from "@prisma/client";
 import { PostService } from "./post.service";
 import { UpdatePostDto } from "./dto";
+import { Public } from "src/decorators/public.decorator";
 
 @Controller('')
 export class PostController {
@@ -18,6 +19,12 @@ export class PostController {
 
     }
 
+    @Get('/posts')
+    async getAllPosts() {
+        return this.postService.getAllPosts();
+    }
+
+    @Public()
     @Post('/post/create')
     async createPost(@Body() data: Prisma.PostCreateInput) {
         return this.postService.createPost(data)
